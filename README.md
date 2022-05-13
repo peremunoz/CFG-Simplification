@@ -1,2 +1,2 @@
 # CFG Simplification
- Program that simplify a Context Free Grammar
+ Program that simplifies a Context Free Grammar
