@@ -1,10 +1,6 @@
 import simplification
 
 
-def createCFG():
-    return simplification.createCFG()
-
-
 class CFG:
     Σn: list
     Σt: list
@@ -26,18 +22,18 @@ class CFG:
             print(*(x for x in self.P[self.Σn[i]]), sep='|')
 
     def simplify(self):
+        self.print('The CFG entered is:')
         simplification.removeNonGeneratingSymbols(self)
         simplification.removeNonReacheableSymbols(self)
+        self.print('The CFG simplified is:')
+
+
+def createCFG():
+    return simplification.createCFG()
 
 
 if __name__ == "__main__":
     print("Welcome to the CFG Simplification program :)\n")
-    #CFG = createCFG()
-    #simplify(CFG)
-    #CFG.print()
-
-    testCFG = CFG(['S', 'A', 'B', 'D', 'E', 'F'], ['a', 'b'], {'S': ['aAa', 'B', 'D'], 'A': ['a', 'aA'], 'B': ['b', 'bbB'], 'D': ['bD'], 'E': ['aa', 'FS'], 'F': ['BE']}, ['S'])
-    testCFG.print('The CFG entered is:')
-    testCFG.simplify()
-    testCFG.print('The CFG simplified is:')
+    CFG = createCFG()
+    CFG.simplify()
 

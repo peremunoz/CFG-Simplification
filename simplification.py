@@ -46,21 +46,27 @@ def removeNonGeneratingSymbols(CFGobject: CFG):
                     Σf.append(key)
                     break
     #   Remove from the CFG the symbols that aren't in the Σf set
-    i = 0
-    k = len(CFGobject.Σn)
-    while i < k:
-        symbolToCheck = CFGobject.Σn[i]
+    nonTerminalIndex = 0
+    numberOfNonTerminals = len(CFGobject.Σn)
+    while nonTerminalIndex < numberOfNonTerminals:
+        symbolToCheck = CFGobject.Σn[nonTerminalIndex]
         if symbolToCheck not in Σf:
             CFGobject.Σn.remove(symbolToCheck)  # Remove from non-terminals set
             CFGobject.P.pop(symbolToCheck)      # Remove its production
             for key in CFGobject.P:
-                for value in range(len(CFGobject.P[key])):
+                value = 0
+                numberOfValues = len(CFGobject.P[key])
+                while value < numberOfValues:
                     for ch in range(len(CFGobject.P[key][value])):
                         if CFGobject.P[key][value][ch] not in Σf and CFGobject.P[key][value][ch] not in CFGobject.Σt:
                             CFGobject.P[key].remove(CFGobject.P[key][value])    # Remove all the productions that go to the deleted symbol
-            i -= 1
-            k -= 1
-        i += 1
+                            value -= 1
+                            numberOfValues -= 1
+                            break
+                    value += 1
+            nonTerminalIndex -= 1
+            numberOfNonTerminals -= 1
+        nonTerminalIndex += 1
 
 
 def removeNonReacheableSymbols(CFGObject: CFG):
@@ -76,23 +82,23 @@ def removeNonReacheableSymbols(CFGObject: CFG):
                     if CFGObject.P[symbol][value][ch] not in Σac:
                         Σac.append(CFGObject.P[symbol][value][ch])
 
-    i = 0
-    k = len(CFGObject.Σn)
-    while i < k:
-        symbolToCheck = CFGObject.Σn[i]
+    nonTerminalIndex = 0
+    numberOfNonTerminals = len(CFGObject.Σn)
+    while nonTerminalIndex < numberOfNonTerminals:
+        symbolToCheck = CFGObject.Σn[nonTerminalIndex]
         if symbolToCheck not in Σac:
             CFGObject.Σn.remove(symbolToCheck)
             CFGObject.P.pop(symbolToCheck)
-            i -= 1
-            k -= 1
-        i += 1
+            nonTerminalIndex -= 1
+            numberOfNonTerminals -= 1
+        nonTerminalIndex += 1
 
-    i = 0
-    k = len(CFGObject.Σt)
-    while i < k:
-        symbolToCheck = CFGObject.Σt[i]
+    terminalIndex = 0
+    numberOfTerminals = len(CFGObject.Σt)
+    while terminalIndex < numberOfTerminals:
+        symbolToCheck = CFGObject.Σt[terminalIndex]
         if symbolToCheck not in Σac:
             CFGObject.Σt.remove(symbolToCheck)
-            i -= 1
-            k -= 1
-        i += 1
+            terminalIndex -= 1
+            numberOfTerminals -= 1
+        terminalIndex += 1
