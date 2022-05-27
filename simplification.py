@@ -19,6 +19,7 @@ def removeNonGeneratingSymbols(CFGobject: CFG):
     Ω = []
     Σf = []
     #   Identifying the productions with terminal symbols (search char by char)
+    #   First iteration of the algorithm
     for key in CFGobject.P:
         for value in range(len(CFGobject.P[key])):
             isGenerating = True
@@ -30,7 +31,7 @@ def removeNonGeneratingSymbols(CFGobject: CFG):
                 Σf.append(key)
                 break
 
-    #   Generating symbols algorithm
+    #   Generating symbols algorithm (check if all the productions )
     while Σf != Ω:
         Ω = Σf.copy()
         for key in CFGobject.P:
@@ -45,21 +46,25 @@ def removeNonGeneratingSymbols(CFGobject: CFG):
                 if isGenerating:
                     Σf.append(key)
                     break
+
     #   Remove from the CFG the symbols that aren't in the Σf set
     nonTerminalIndex = 0
     numberOfNonTerminals = len(CFGobject.Σn)
+
     while nonTerminalIndex < numberOfNonTerminals:
         symbolToCheck = CFGobject.Σn[nonTerminalIndex]
         if symbolToCheck not in Σf:
             CFGobject.Σn.remove(symbolToCheck)  # Remove from non-terminals set
-            CFGobject.P.pop(symbolToCheck)      # Remove its production
+            CFGobject.P.pop(symbolToCheck)  # Remove its production
+            #   Check if any production has a non generating symbol, if so, delete it
             for key in CFGobject.P:
                 value = 0
                 numberOfValues = len(CFGobject.P[key])
                 while value < numberOfValues:
                     for ch in range(len(CFGobject.P[key][value])):
                         if CFGobject.P[key][value][ch] not in Σf and CFGobject.P[key][value][ch] not in CFGobject.Σt:
-                            CFGobject.P[key].remove(CFGobject.P[key][value])    # Remove all the productions that go to the deleted symbol
+                            CFGobject.P[key].remove(
+                                CFGobject.P[key][value])  # Remove all the productions that go to the deleted symbol
                             value -= 1
                             numberOfValues -= 1
                             break
@@ -69,7 +74,8 @@ def removeNonGeneratingSymbols(CFGobject: CFG):
         nonTerminalIndex += 1
 
 
-def removeNonReacheableSymbols(CFGObject: CFG):
+#   Remove non-reachable symbols algorithm
+def removeNonReachableSymbols(CFGObject: CFG):
     Ω = []
     Σac = CFGObject.S
     while Σac != Ω:
@@ -82,6 +88,7 @@ def removeNonReacheableSymbols(CFGObject: CFG):
                     if CFGObject.P[symbol][value][ch] not in Σac:
                         Σac.append(CFGObject.P[symbol][value][ch])
 
+    #   Delete non-accessible non-terminal symbols from non-terminal alphabet and its productions
     nonTerminalIndex = 0
     numberOfNonTerminals = len(CFGObject.Σn)
     while nonTerminalIndex < numberOfNonTerminals:
@@ -93,6 +100,7 @@ def removeNonReacheableSymbols(CFGObject: CFG):
             numberOfNonTerminals -= 1
         nonTerminalIndex += 1
 
+    #   Delete non-accessible terminal symbols from terminal alphabet
     terminalIndex = 0
     numberOfTerminals = len(CFGObject.Σt)
     while terminalIndex < numberOfTerminals:

@@ -24,7 +24,7 @@ class CFG:
     def simplify(self):
         self.print('The CFG entered is:')
         simplification.removeNonGeneratingSymbols(self)
-        simplification.removeNonReacheableSymbols(self)
+        simplification.removeNonReachableSymbols(self)
         self.print('The CFG simplified is:')
 
 
