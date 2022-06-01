@@ -31,7 +31,7 @@ def removeNonGeneratingSymbols(CFGobject: CFG):
                 Σf.append(key)
                 break
 
-    #   Generating symbols algorithm (check if all the productions )
+    #   Generating symbols algorithm
     while Σf != Ω:
         Ω = Σf.copy()
         for key in CFGobject.P:

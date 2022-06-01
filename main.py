@@ -24,6 +24,7 @@ class CFG:
     def simplify(self):
         self.print('The CFG entered is:')
         simplification.removeNonGeneratingSymbols(self)
+        self.print('The CFG without non generating symbols is:')
         simplification.removeNonReachableSymbols(self)
         self.print('The CFG simplified is:')
 
@@ -33,7 +34,7 @@ def createCFG():
 
 
 if __name__ == "__main__":
-    print("Welcome to the CFG Simplification program :)\n")
+    print("Welcome to the CFG Simplification program\n")
     CFG = createCFG()
     CFG.simplify()
 
